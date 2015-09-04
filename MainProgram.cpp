@@ -13,6 +13,8 @@ using namespace cv;
 #define WHITE 255 // in terms of CV_8UC1
 #define BLACK 0   //        -||-
 
+#define FILTER_SIZE 3 // the filter will consider a FILTER_SIZE x FILTER_SIZE window
+
 // generates non-random salt & pepper noise, in a repeating pattern (because it's easy :-)
 void SaltAndPepperNoise(Mat& image)
 {
@@ -42,7 +44,16 @@ int main(int argc, char* argv[])
 	// make a noise copy
 	Mat noisy = scaled.clone();
 	SaltAndPepperNoise(noisy);
+
+	// show noisy copy to screen
 	imshow("A beautiful girl - with Salt & Pepper noise", noisy);
+
+	// filter noisy copy with the CPU filter
+	Mat denoised(noisy.size(), CV_8UC1);
+	medianBlur(noisy, denoised, FILTER_SIZE);
+	
+	// show denoised picture
+	imshow("A beautiful girl - denoised", denoised);	
 	waitKey(0); // waits infinitely, until a key is pressed
 
 	return 0;
