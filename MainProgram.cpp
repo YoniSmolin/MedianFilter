@@ -10,16 +10,40 @@ using namespace cv;
 #define ROWS 424
 #define COLS 512
 
+#define WHITE 255 // in terms of CV_8UC1
+#define BLACK 0   //        -||-
+
+// generates non-random salt & pepper noise, in a repeating pattern (because it's easy :-)
+void SaltAndPepperNoise(Mat& image)
+{
+	uchar* data = image.data;
+	const int primeNumber = 67;
+	bool white = true;
+	for(int i=0; i<ROWS*COLS; i++)
+	{
+		if (i % primeNumber == 0)
+		{
+			image.data[i] = white ? WHITE : BLACK;
+			white = !white;
+		}
+	}
+}	
+
 int main(int argc, char* argv[])
 {
 	// load and scale an image
-	Mat originalImage = imread("BeautifulGirl.jpg", CV_LOAD_IMAGE_GRAYSCALE);
-	Mat originalScaled(ROWS, COLS, CV_8UC1);
-	resize(originalImage, originalScaled, originalScaled.size(), 0, 0, INTER_AREA);	
+	Mat original = imread("BeautifulGirl.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+	Mat scaled(ROWS, COLS, CV_8UC1);
+	resize(original, scaled, scaled.size(), 0, 0, INTER_AREA);	
 
 	// show the image to screen
-	imshow("A beautiful girl - noise free", originalScaled);
-	waitKey(0);
+	imshow("A beautiful girl - noise free", scaled);
+
+	// make a noise copy
+	Mat noisy = scaled.clone();
+	SaltAndPepperNoise(noisy);
+	imshow("A beautiful girl - with Salt & Pepper noise", noisy);
+	waitKey(0); // waits infinitely, until a key is pressed
 
 	return 0;
 }
