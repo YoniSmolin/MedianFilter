@@ -1,5 +1,5 @@
 /*
- * MainProgram.cpp - a test program the loads an image, adds salt and pepper noise, runs CPU and GPU versions of the median filter and compares the results.
+ * MainProgram.cpp - a test program that loads an image, adds salt and pepper noise, runs CPU and GPU versions of the median filter and compares the results.
  */
 
 #include <opencv2/highgui/highgui.hpp>
